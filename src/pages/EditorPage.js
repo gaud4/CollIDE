@@ -11,6 +11,7 @@ import { useLocation , useNavigate , Navigate , useParams } from 'react-router-d
 import toast from 'react-hot-toast';
 import {Button} from "@nextui-org/react";
 import {Select, SelectSection, SelectItem} from "@nextui-org/react";
+import {Textarea} from "@nextui-org/react";
 const EditorPage = () => {
   const [lang, setLang] = useRecoilState(language);
   const [them, setThem] = useRecoilState(cmtheme);
@@ -108,7 +109,6 @@ const EditorPage = () => {
 const codes = [
     { label: "GNU G++20 13.2 (64bit)", value: "cpp" },
     { label: "PyPy 3.9.10 (64 bit)", value: "python" },
-    { label: "Bird", value: "bird" },
     // Add more animals as needed
   ];
 
@@ -147,7 +147,7 @@ const codes = [
         className="max-w-xs" 
       >
         {codes.map((animal) => (
-          <SelectItem key={codes.value} value={codes.value}>
+          <SelectItem key={codes.value} value={codes.value} className="dark ">
             {codes.label}
           </SelectItem>
         ))}
@@ -176,8 +176,21 @@ const codes = [
                 /></div>
                 <div style={{ flex: '25%' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div style={{ flex: 1 }}>Input</div>
-                <div style={{ flex: 1 }}>Output</div>
+                <div style={{ flex: 1 }}><Textarea
+      label="input"
+      placeholder="Enter Input"
+      className="max-w-xs"
+      style={{ height: '32vh'}}
+    /></div>
+                <div style={{ flex: 1 }}><Textarea
+      isReadOnly
+      label="Description"
+      variant="bordered"
+      labelPlacement="outside"
+      placeholder="Enter your description"
+      defaultValue="Output"
+      className="max-w-xs"
+    /></div>
                 </div> 
                 </div>
                 
