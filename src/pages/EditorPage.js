@@ -108,115 +108,65 @@ const EditorPage = () => {
     ];
 
     return (
-        <div>
-            <div style={{height:"10vh"}}>
-             <Navbar position="static" style={{backgroundColor:"#141414"}}>
-      <NavbarBrand>
-        {/* <AcmeLogo /> */}
-        <p className="font-bold text-inherit">Coll-IDE</p>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
-    </div>
-        <div className="mainWrap">
-            {/* <div className="asideLeft">
-                <div style={{height: "50vh"}}>
-                    <Select
-                        label="Select Language" 
-                        className="max-w-xs" 
-                    >
-                        {codes.map((animal) => (
-                            <SelectItem key={codes.value} value={codes.value} className="dark ">
-                                {codes.label}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                </div>
-                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
-                    <Button color="primary" variant="flat" >RUN CODE</Button>
-                </div>
-                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
-                    <Button color="primary" variant="flat" >SUBMIT CODE</Button>
-                </div>
-                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
-                    <Button color="success" variant="bordered" onClick={copyRoomId}>Copy Room ID</Button>
-                </div>
-                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
-                    <Button color="danger"  className="m-4" onClick={leaveRoom}>Leave</Button>
-                </div>
-            </div> */}
-            <div style={{width: "65vw"}}>
-            <Editor
-        height="90vh"
-        theme="vs-dark"
-        path={file.name}
-        defaultLanguage={file.language}
-        defaultValue={file.value}
-        onMount={(editor) => (editorRef.current = editor)}
-      />
+        <div style={{height: "100vh", width: "100vw"}}>
+            <div style={{height: "10vh", width: "100vw"}}>
+                <Navbar position="static" style={{backgroundColor:"#141414"}}>
+                    <NavbarBrand>
+                        <p className="font-bold text-inherit">Coll-IDE</p>
+                    </NavbarBrand>
+                    <NavbarContent justify="center">
+                        <NavbarItem>
+                            <Button color="success" variant="flat" >Run Code</Button>
+                        </NavbarItem>
+                        <NavbarItem>
+                            <Button color="success" variant="flat" >Submit Code</Button>
+                        </NavbarItem>
+                        <NavbarItem>
+                            <Button color="success" variant="flat" onClick={copyRoomId}>Copy Room ID</Button>
+                        </NavbarItem>
+                        
+                    </NavbarContent>
+                    <NavbarContent justify="end">
+                        <NavbarItem>
+                            <Button color="danger"  className="m-4" onClick={leaveRoom}>Leave</Button>
+                        </NavbarItem>
+                    </NavbarContent>
+                </Navbar>
             </div>
-            <div style={{width: "35vw"}}>
-                <div style={{height: "45vh"}}>
-                    {/* <Textarea
-                        label="input"
-                        placeholder="Enter Input"
-                        className="max-w-xs"
-                    /> */}
-                    <Editor
-        height="50vh"
-        theme="vs-dark"
-        path={file2.name}
-        defaultLanguage={file2.language}
-        defaultValue={file2.value}
-        onMount={(editor) => (editorRef2.current = editor)}
-      />
+            <div style={{height: "90vh", width: "100vw", display: "flex"}}>
+                <div style={{height: "90vh", width: "65vw", borderRight: "10px solid black"}}>
+                        <Editor
+                            height="90vh"
+                            theme="vs-dark"
+                            path={file.name}
+                            defaultLanguage={file.language}
+                            defaultValue={file.value}
+                            onMount={(editor) => (editorRef.current = editor)}
+                        />
                 </div>
-                <div style={{height: "45vh"}}>
-                    {/* <Textarea
-                        isReadOnly
-                        variant="bordered"
-                        labelPlacement="outside"
-                        placeholder="Enter your description"
-                        defaultValue="Output"
-                        className="max-w-xs"
-                    /> */}
-                    <Editor
-        height="50vh"
-        theme="vs-dark"
-        path={file3.name}
-        defaultLanguage={file3.language}
-        defaultValue={file3.value}
-        onMount={(editor) => (editorRef3.current = editor)}
-      />
+                <div style={{height: "90vh", width: "35vw"}}>
+                    <div style={{height: "40vh", width: "35vw"}}>
+                        <Editor
+                            height="50vh"
+                            theme="vs-dark"
+                            path={file2.name}
+                            defaultLanguage={file2.language}
+                            defaultValue={file2.value}
+                            onMount={(editor) => (editorRef2.current = editor)}
+                        />
+                    </div>
+                    <div style={{height: "40vh", width: "35vw"}}>
+                        <Editor
+                            height="50vh"
+                            theme="vs-dark"
+                            path={file3.name}
+                            defaultLanguage={file3.language}
+                            defaultValue={file3.value}
+                            onMount={(editor) => (editorRef3.current = editor)}
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     )
 };
