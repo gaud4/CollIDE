@@ -1948,7 +1948,7 @@
     lodash.debounce "^4.0.8"
     scroll-into-view-if-needed "3.0.10"
 
-"@nextui-org/card@2.0.26":
+"@nextui-org/card@^2.0.26", "@nextui-org/card@2.0.26":
   version "2.0.26"
   resolved "https://registry.npmjs.org/@nextui-org/card/-/card-2.0.26.tgz"
   integrity sha512-2joRdGIfbabCOoCAMEXSJPOohWFjw05nkz3Buy8eCi41NcxZgHenu5Pis1gWLvlrg1FcOQ/Ns5EO1yp4edWt4A==
@@ -2084,7 +2084,7 @@
     "@nextui-org/shared-utils" "2.0.5"
     "@nextui-org/use-image" "2.0.5"
 
-"@nextui-org/input@2.1.19":
+"@nextui-org/input@^2.1.19", "@nextui-org/input@2.1.19":
   version "2.1.19"
   resolved "https://registry.npmjs.org/@nextui-org/input/-/input-2.1.19.tgz"
   integrity sha512-5GXB0f+LRFLi96Rc5oR4TpvOIqwlaVg4iAZUvDcW7vgRXBBLliMSn8MkVUYh66+7YVaqE99bZntYT6jTz8QsGw==
@@ -2183,7 +2183,7 @@
     "@react-stately/overlays" "^3.6.5"
     "@react-types/overlays" "^3.8.5"
 
-"@nextui-org/navbar@2.0.29":
+"@nextui-org/navbar@^2.0.29", "@nextui-org/navbar@2.0.29":
   version "2.0.29"
   resolved "https://registry.npmjs.org/@nextui-org/navbar/-/navbar-2.0.29.tgz"
   integrity sha512-GozIE+qMEuLRrcM0zlXA2Gao7y9z9V+hh3tF7xihbjWoh5+6uqDUW6sK6nLVWDmN2K2HJ37Ero/3Ak33EaM5xQ==

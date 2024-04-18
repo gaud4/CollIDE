@@ -4,14 +4,12 @@ import Home from './pages/Home';
 import EditorPage from './pages/EditorPage';
 import './App.css'
 import { Toaster } from 'react-hot-toast';
-import { PostContextProvider } from './context/PostContext'
 import { RecoilRoot } from 'recoil';
 
 import {NextUIProvider} from "@nextui-org/react";
 
 const App = () => {
   return (
-    
     <NextUIProvider>
       <main className="dark text-foreground bg-background">
       <div>
