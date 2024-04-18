@@ -64,7 +64,7 @@ const Home = () => {
         </div>
       </div>
       <div style={{height: "20vh", width: "50vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
-      <h1 style={{height: "20vh", width: "25vw", fontSize: 17, textAlign: "center", display: "grid", placeItems: "center", paddingLeft: "3vw", paddingRight: "3vw", paddingTop:"2vh", paddingBottom:"2vh"}}>
+        <h1 style={{height: "20vh", width: "25vw", fontSize: 17, textAlign: "center", display: "grid", placeItems: "center", paddingLeft: "3vw", paddingRight: "3vw", paddingTop:"2vh", paddingBottom:"2vh"}}>
           Enter your username here
         </h1>
         <div style={{

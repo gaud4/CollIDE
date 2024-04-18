@@ -96,9 +96,8 @@ const EditorPage = () => {
 
     return (
         <div className="mainWrap">
-            <div className="asideLeft" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-                
-                <div  style={{ flex: 1 }}>
+            <div className="asideLeft">
+                <div style={{height: "50vh"}}>
                     <Select
                         label="Select Language" 
                         className="max-w-xs" 
@@ -110,23 +109,21 @@ const EditorPage = () => {
                         ))}
                     </Select>
                 </div>
-
-                <div style={{ marginBottom: '20px' }}>
+                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
                     <Button color="primary" variant="flat" >RUN CODE</Button>
                 </div>
-
-                <div style={{ marginBottom: '20px' }}>
+                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
                     <Button color="primary" variant="flat" >SUBMIT CODE</Button>
                 </div>
-
-                <div className="flex gap-4" >
+                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
                     <Button color="success" variant="bordered" onClick={copyRoomId}>Copy Room ID</Button>
+                </div>
+                <div style={{height: "10vh", display: "flex", justifyContent: "center", alignContent: "center", placeItems: "center"}}>
                     <Button color="danger"  className="m-4" onClick={leaveRoom}>Leave</Button>
                 </div>
             </div>
-            
-            <div className="editorWrap" style={{ display: 'flex', height: '100%' }}>
-                <div style={{ flex: '75%' }}>
+            <div className="editorWrap" style={{width: "60vw"}}>
+                <div>
                     <Editor
                         socketRef={socketRef}
                         roomId={roomId}
@@ -134,30 +131,26 @@ const EditorPage = () => {
                             codeRef.current = code;
                         }}
                     />
-                </div>
-                <div style={{ flex: '25%' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <div style={{ flex: 1 }}>
-                            <Textarea
-                                label="input"
-                                placeholder="Enter Input"
-                                className="max-w-xs"
-                                style={{ height: '32vh'}}
-                            />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                            <Textarea
-                                isReadOnly
-                                label="Description"
-                                variant="bordered"
-                                labelPlacement="outside"
-                                placeholder="Enter your description"
-                                defaultValue="Output"
-                                className="max-w-xs"
-                            />
-                        </div>
-                    </div> 
                 </div> 
+            </div>
+            <div style={{width: "60vw"}}>
+                <div style={{height: "50vh"}}>
+                    <Textarea
+                        label="input"
+                        placeholder="Enter Input"
+                        className="max-w-xs"
+                    />
+                </div>
+                <div style={{height: "50vh"}}>
+                    <Textarea
+                        isReadOnly
+                        variant="bordered"
+                        labelPlacement="outside"
+                        placeholder="Enter your description"
+                        defaultValue="Output"
+                        className="max-w-xs"
+                    />
+                </div>
             </div>
         </div>
     )
