@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-// import Editor from '../components/Editor';
 import ACTIONS from '../Actions';
 import toast from 'react-hot-toast';
 import { initSocket } from '../socket';
 import { useLocation , useNavigate , Navigate , useParams } from 'react-router-dom';
 import {Button} from "@nextui-org/react";
-import {Select, SelectSection, SelectItem} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import files from "./files";
 import files2 from "./files2";
 import files3 from "./files3";
@@ -15,7 +14,7 @@ import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link} from "@nextui-org/
 
 const EditorPage = () => {
     const [clients, setClients] = useState([]);
-
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const socketRef = useRef(null);
     const codeRef = useRef(null);
     const location = useLocation();
@@ -30,6 +29,8 @@ const EditorPage = () => {
     const editorRef3 = useRef(null);
     const [fileName3, setFileName3] = useState("script3.js");
     const file3 = files3[fileName3];
+    
+
     useEffect(() => {
         const init = async () => {
             socketRef.current = await initSocket();
@@ -119,7 +120,48 @@ const EditorPage = () => {
                             <Button color="success" variant="flat" >Run Code</Button>
                         </NavbarItem>
                         <NavbarItem>
-                            <Button color="success" variant="flat" >Submit Code</Button>
+                            <Button color="success" variant="flat" onPress={onOpen}>Fetch/Submit</Button>
+                            <Modal isOpen={isOpen} onOpenChange={onOpenChange} styles={{backgroundColor: "black"}}>
+                                <ModalContent>
+                                {(onClose) => (
+                                    <>
+                                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                                    <ModalBody>
+                                        <div styles={{justifyContent: "center", alignContent: "center"}}>
+                                            <div>
+                                                <Textarea
+                                                    isRequired
+                                                    label=""
+                                                    variant="underlined"
+                                                    labelPlacement="outside"
+                                                    placeholder="Enter the Problem ID"
+                                                    className="max-w-xs"
+                                                />
+                                            </div>
+                                            <div style={{display: "flex"}}>
+                                                <div style={{padding: "2vw"}}>
+                                                    <Button color="primary" variant="flat">
+                                                        Fetch Cases
+                                                    </Button>
+                                                </div>
+                                                <div style={{padding: "2vw"}}>
+                                                    <Button color="primary" variant="flat">
+                                                        Submit Code
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="danger" variant="light" onPress={onClose}>
+                                            Close
+                                        </Button>
+                                    </ModalFooter>
+                                    </>
+                                )}
+                                </ModalContent>
+                            </Modal>
                         </NavbarItem>
                         <NavbarItem>
                             <Button color="success" variant="flat" onClick={copyRoomId}>Copy Room ID</Button>
