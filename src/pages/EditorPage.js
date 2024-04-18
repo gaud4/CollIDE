@@ -9,7 +9,8 @@ import { initSocket } from '../socket';
 import ACTIONS from '../Actions';
 import { useLocation , useNavigate , Navigate , useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
-
+import {Button} from "@nextui-org/react";
+import {Select, SelectSection, SelectItem} from "@nextui-org/react";
 const EditorPage = () => {
   const [lang, setLang] = useRecoilState(language);
   const [them, setThem] = useRecoilState(cmtheme);
@@ -35,7 +36,7 @@ const EditorPage = () => {
           function handleErrors(e) {
               console.log('socket error', e);
               toast.error('Socket connection failed, try again later.');
-              reactNavigator('/');
+            //   reactNavigator('/');
           }
 
           socketRef.current.emit(ACTIONS.JOIN, {
@@ -104,14 +105,17 @@ const EditorPage = () => {
 //    console.log("selected Option...", sl);
 //    setSelectedLanguage(sl);
 //  };
+const codes = [
+    { label: "GNU G++20 13.2 (64bit)", value: "cpp" },
+    { label: "PyPy 3.9.10 (64 bit)", value: "python" },
+    { label: "Bird", value: "bird" },
+    // Add more animals as needed
+  ];
 
   return (
     <div className="mainWrap">
-            <div className="asideLeft">
-                <div className="asideLeftInner">
-                    <div className="logo">
-                      <img src='/code-editor-background4.gif' alt='background4' className='background4img'/>  
-                    </div>
+            <div className="asideLeft" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+                {/* <div className="asideLeftInner">
                     <h3>Connected</h3>
                     <div className="clientsList">
                         {clients.map((client) => (
@@ -121,123 +125,62 @@ const EditorPage = () => {
                             />
                         ))}
                     </div>
+                </div> */}
+                <div style={{ marginBottom: '20px' }}>
+                <Button color="primary" variant="flat" >RUN CODE</Button>
                 </div>
-
-                <label>
+                
+                {/* <label>
                     Select Language:
                     <select value={lang} onChange={(e) => { setLang(e.target.value); window.location.reload(); }} className="seLang">
-                        <option value="clike">C / C++ / C#</option>
-                        <option value="css">CSS</option>
-                        <option value="dart">Dart</option>
-                        <option value="django">Django</option>
-                        <option value="dockerfile">Dockerfile</option>
-                        <option value="go">Go</option>
-                        <option value="htmlmixed">HTML-mixed</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="jsx">JSX</option>
-                        <option value="markdown">Markdown</option>
-                        <option value="php">PHP</option>
-                        <option value="python">Python</option>
-                        <option value="r">R</option>
-                        <option value="rust">Rust</option>
-                        <option value="ruby">Ruby</option>
-                        <option value="sass">Sass</option>
-                        <option value="shell">Shell</option>
-                        <option value="sql">SQL</option>
-                        <option value="swift">Swift</option>
-                        <option value="xml">XML</option>
-                        <option value="yaml">yaml</option>
+                        <option value="clike">GNU G++20 13.2 (64bit)</option>
+                        <option value="css">PyPy 3.9.10 (64 bit)</option>
+                        
                     </select>
-                </label>
-
-                <label>
-                    Select Theme:
-                    <select value={them} onChange={(e) => { setThem(e.target.value); window.location.reload(); }} className="seLang">
-                        <option value="default">default</option>
-                        <option value="dracula">dracula</option>
-                        <option value="3024-day">3024-day</option>
-                        <option value="3024-night">3024-night</option>
-                        <option value="abbott">abbott</option>
-                        <option value="abcdef">abcdef</option>
-                        <option value="ambiance">ambiance</option>
-                        <option value="ayu-dark">ayu-dark</option>
-                        <option value="ayu-mirage">ayu-mirage</option>
-                        <option value="base16-dark">base16-dark</option>
-                        <option value="base16-light">base16-light</option>
-                        <option value="bespin">bespin</option>
-                        <option value="blackboard">blackboard</option>
-                        <option value="cobalt">cobalt</option>
-                        <option value="colorforth">colorforth</option>
-                        <option value="darcula">darcula</option>
-                        <option value="duotone-dark">duotone-dark</option>
-                        <option value="duotone-light">duotone-light</option>
-                        <option value="eclipse">eclipse</option>
-                        <option value="elegant">elegant</option>
-                        <option value="erlang-dark">erlang-dark</option>
-                        <option value="gruvbox-dark">gruvbox-dark</option>
-                        <option value="hopscotch">hopscotch</option>
-                        <option value="icecoder">icecoder</option>
-                        <option value="idea">idea</option>
-                        <option value="isotope">isotope</option>
-                        <option value="juejin">juejin</option>
-                        <option value="lesser-dark">lesser-dark</option>
-                        <option value="liquibyte">liquibyte</option>
-                        <option value="lucario">lucario</option>
-                        <option value="material">material</option>
-                        <option value="material-darker">material-darker</option>
-                        <option value="material-palenight">material-palenight</option>
-                        <option value="material-ocean">material-ocean</option>
-                        <option value="mbo">mbo</option>
-                        <option value="mdn-like">mdn-like</option>
-                        <option value="midnight">midnight</option>
-                        <option value="monokai">monokai</option>
-                        <option value="moxer">moxer</option>
-                        <option value="neat">neat</option>
-                        <option value="neo">neo</option>
-                        <option value="night">night</option>
-                        <option value="nord">nord</option>
-                        <option value="oceanic-next">oceanic-next</option>
-                        <option value="panda-syntax">panda-syntax</option>
-                        <option value="paraiso-dark">paraiso-dark</option>
-                        <option value="paraiso-light">paraiso-light</option>
-                        <option value="pastel-on-dark">pastel-on-dark</option>
-                        <option value="railscasts">railscasts</option>
-                        <option value="rubyblue">rubyblue</option>
-                        <option value="seti">seti</option>
-                        <option value="shadowfox">shadowfox</option>
-                        <option value="solarized">solarized</option>
-                        <option value="the-matrix">the-matrix</option>
-                        <option value="tomorrow-night-bright">tomorrow-night-bright</option>
-                        <option value="tomorrow-night-eighties">tomorrow-night-eighties</option>
-                        <option value="ttcn">ttcn</option>
-                        <option value="twilight">twilight</option>
-                        <option value="vibrant-ink">vibrant-ink</option>
-                        <option value="xq-dark">xq-dark</option>
-                        <option value="xq-light">xq-light</option>
-                        <option value="yeti">yeti</option>
-                        <option value="yonce">yonce</option>
-                        <option value="zenburn">zenburn</option>
-                    </select>
-                </label>
-
-                <button className="btn copyBtn" onClick={copyRoomId}>
+                </label> */}
+        
+      
+                {/* npm install @nextui-org/dropdown */}
+                <div  style={{ flex: 1 }}>
+                <Select
+        label="Select Language" 
+        className="max-w-xs" 
+      >
+        {codes.map((animal) => (
+          <SelectItem key={codes.value} value={codes.value}>
+            {codes.label}
+          </SelectItem>
+        ))}
+      </Select>
+                </div>
+                <div className="flex gap-4" >
+                <Button color="success" variant="bordered" onClick={copyRoomId}>Copy Room ID</Button>
+                {/* <button className="btn copyBtn" onClick={copyRoomId}>
                     Copy ROOM ID
-                </button>
-                <button className="btn leaveBtn" onClick={leaveRoom}>
-                    Leave
-                </button>
+                </button> */}
+                <Button color="danger"  className="m-4" onClick={leaveRoom}>Leave</Button>
+
+                </div>
+                
 
                 
             </div>
 
-            <div className="editorWrap">
-                <Editor
+            <div className="editorWrap" style={{ display: 'flex', height: '100%' }}>
+                <div style={{ flex: '75%' }}><Editor
                     socketRef={socketRef}
                     roomId={roomId}
                     onCodeChange={(code) => {
                         codeRef.current = code;
                     }}
-                />
+                /></div>
+                <div style={{ flex: '25%' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <div style={{ flex: 1 }}>Input</div>
+                <div style={{ flex: 1 }}>Output</div>
+                </div> 
+                </div>
+                
             </div>
         </div>
     

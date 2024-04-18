@@ -41,7 +41,7 @@ const Home = () => {
     <div className='homePageWrapper'>
       
       <div className='background4'>
-        <img src='/code-editor-background4.gif' alt='background4' className='background4img'/>
+        {/* <img src='/code-editor-background4.gif' alt='background4' className='background4img'/> */}
         <h1 className='name'><i>Coll-IDE</i></h1>
         <h1>Share code in Real-time with Developers</h1>
         
@@ -54,8 +54,7 @@ const Home = () => {
             <a onClick={createNewRoom} href='' className='createNewBtn'>create now </a>
           </span>
           <input type='text' className='inputBox' placeholder='USERNAME' value={username} onChange={(e) => setUsername(e.target.value)} onKeyUp={handleInputEnter} />
-          <button className='btn joinBtn' onClick={joinRoom}> JOIN </button>
-          <h3>No sign up. Free Forever..!!</h3>
+          <button className='btn joinBtn' onClick={joinRoom}> JOIN </button>  
         </div>
       </div>
       
