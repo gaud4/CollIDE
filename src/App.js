@@ -5,6 +5,7 @@ import EditorPage from './pages/EditorPage';
 import './App.css'
 import { Toaster } from 'react-hot-toast';
 import { RecoilRoot } from 'recoil';
+import Penciltool from './pages/Penciltool'
 
 import {NextUIProvider} from "@nextui-org/react";
 
@@ -39,6 +40,7 @@ const App = () => {
 
       </main>
     </NextUIProvider>
+    // <Penciltool/>
   );
 }
 
