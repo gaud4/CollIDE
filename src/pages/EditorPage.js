@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+// App.js
+
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ACTIONS from '../Actions';
 import toast from 'react-hot-toast';
 import { initSocket } from '../socket';
@@ -11,6 +13,7 @@ import files2 from "./files2";
 import files3 from "./files3";
 import Editor from "@monaco-editor/react";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link} from "@nextui-org/react";
+import axios from 'axios';
 
 const EditorPage = () => {
     const [clients, setClients] = useState([]);
@@ -20,16 +23,38 @@ const EditorPage = () => {
     const location = useLocation();
     const { roomId } = useParams();
     const reactNavigator = useNavigate();
-    const editorRef = useRef(null);
-    const [fileName, setFileName] = useState("script.js");
-    const file = files[fileName];
+
+    const editorRef = useRef();
+    const [value, setValue] = useState(() => {
+        const storedValue = localStorage.getItem('code');
+        return storedValue ? storedValue : '';
+    });
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            localStorage.setItem('code', value);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [value]);
+
+    const onMount = (editor) => {
+        editorRef.current = editor;
+        editor.focus();
+    };
+
     const editorRef2 = useRef(null);
     const [fileName2, setFileName2] = useState("script2.js");
     const file2 = files2[fileName2];
+
     const editorRef3 = useRef(null);
     const [fileName3, setFileName3] = useState("script3.js");
     const file3 = files3[fileName3];
-    
+
+    const [problemCode, setProblemCode] = useState('');
+    const [testCases, setTestCases] = useState([]);
 
     useEffect(() => {
         const init = async () => {
@@ -103,10 +128,30 @@ const EditorPage = () => {
         return <Navigate to="/" />;
     }
 
-    const codes = [
-        { label: "GNU G++20 13.2 (64bit)", value: "cpp" },
-        { label: "PyPy 3.9.10 (64 bit)", value: "python" }
-    ];
+    const fetchTestCases = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4000/scrape?problemCode=${problemCode}`);
+            // console.log("test case fetch success");
+            console.log(response.data);
+            const testCaseCode = response.data.join('\n');
+            editorRef2.current.setValue(testCaseCode);
+            setTestCases(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const submitCode = async () => {
+        const code = editorRef.current?.getValue();
+        try {
+            const response = await axios.post('http://localhost:4000/submit', { code, problemCode });
+            console.log(response.data);
+            toast.success('Code submitted successfully');
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to submit code');
+        }
+    };
 
     return (
         <div style={{height: "100vh", width: "100vw", fontFamily: "Manrope"}}>
@@ -125,7 +170,7 @@ const EditorPage = () => {
                                 <ModalContent>
                                 {(onClose) => (
                                     <>
-                                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                                    <ModalHeader className="flex flex-col gap-1">Fetch/Submit</ModalHeader>
                                     <ModalBody>
                                         <div styles={{justifyContent: "center", alignContent: "center"}}>
                                             <div>
@@ -136,16 +181,18 @@ const EditorPage = () => {
                                                     labelPlacement="outside"
                                                     placeholder="Enter the Problem ID"
                                                     className="max-w-xs"
+                                                    value={problemCode}
+                                                    onChange={(e) => setProblemCode(e.target.value)}
                                                 />
                                             </div>
                                             <div style={{display: "flex", fontFamily: "Manrope"}}>
                                                 <div style={{padding: "2vw", fontFamily: "Manrope"}}>
-                                                    <Button color="primary" variant="flat">
+                                                    <Button color="primary" variant="flat" onClick={fetchTestCases}>
                                                         Fetch Cases
                                                     </Button>
                                                 </div>
                                                 <div style={{padding: "2vw", fontFamily: "Manrope"}}>
-                                                    <Button color="primary" variant="flat">
+                                                    <Button color="primary" variant="flat" onClick={submitCode}>
                                                         Submit Code
                                                     </Button>
                                                 </div>
@@ -180,10 +227,11 @@ const EditorPage = () => {
                         <Editor
                             height="90vh"
                             theme="vs-dark"
-                            path={file.name}
-                            defaultLanguage={file.language}
-                            defaultValue={file.value}
-                            onMount={(editor) => (editorRef.current = editor)}
+                            defaultLanguage="cpp"
+                            defaultValue={value}
+                            value={value}
+                            onMount={onMount}
+                            onChange={(value) => setValue(value)}
                         />
                 </div>
                 <div style={{fontFamily: "Manrope", height: "90vh", width: "35vw"}}>
@@ -210,7 +258,7 @@ const EditorPage = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default EditorPage;
