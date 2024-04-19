@@ -40,7 +40,7 @@ const Penciltool = () => {
     <canvas
       id='canvas'
       width={window.innerWidth}
-      height={window.innerHeight}
+      height={window.innerHeight*0.9}
       onMouseDown={startDrawing}
       onMouseUp={finishDrawing}
       onMouseMove={draw}

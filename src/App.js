@@ -6,8 +6,8 @@ import './App.css'
 import { Toaster } from 'react-hot-toast';
 import { RecoilRoot } from 'recoil';
 import Penciltool from './pages/Penciltool'
-
 import {NextUIProvider} from "@nextui-org/react";
+import WhiteBoard from './pages/WhiteBoard';
 
 const App = () => {
   return (
@@ -34,6 +34,7 @@ const App = () => {
                             path="/editor/:roomId"
                             element={<EditorPage />}
                         ></Route>
+                        <Route path="/whiteboard/:roomId" element={<WhiteBoard/>}></Route>
                     </Routes>
                 </RecoilRoot>
       </BrowserRouter>

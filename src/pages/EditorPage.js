@@ -14,6 +14,7 @@ import files3 from "./files3";
 import Editor from "@monaco-editor/react";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link} from "@nextui-org/react";
 import axios from 'axios';
+import { FaPencilAlt } from "react-icons/fa";
 
 const EditorPage = () => {
     const [clients, setClients] = useState([]);
@@ -124,9 +125,9 @@ const EditorPage = () => {
         reactNavigator('/');
     }
 
-    if (!location.state) {
-        return <Navigate to="/" />;
-    }
+    // if (!location.state) {
+    //     return <Navigate to="/" />;
+    // }
 
     const fetchTestCases = async () => {
         try {
@@ -152,7 +153,6 @@ const EditorPage = () => {
             toast.error('Failed to submit code');
         }
     };
-
     return (
         <div style={{height: "100vh", width: "100vw", fontFamily: "Manrope"}}>
             <div style={{height: "10vh", width: "100vw"}}>
@@ -161,6 +161,10 @@ const EditorPage = () => {
                         <p style={{fontFamily: "Manrope", fontSize: 25}}>Coll-IDE</p>
                     </NavbarBrand>
                     <NavbarContent justify="center">
+                        <NavbarItem>
+                        
+                        <FaPencilAlt onClick={() => reactNavigator(`/whiteboard/${roomId}`)} />
+                        </NavbarItem>
                         <NavbarItem>
                             <Button color="success" variant="flat" >Run Code</Button>
                         </NavbarItem>
