@@ -23,15 +23,36 @@ const EditorPage = () => {
     const location = useLocation();
     const { roomId } = useParams();
     const reactNavigator = useNavigate();
-    const editorRef = useRef(null);
-    const [fileName, setFileName] = useState("script.js");
-    const file = files[fileName];
+
+    const editorRef = useRef();
+    const [value, setValue] = useState(() => {
+        const storedValue = localStorage.getItem('code');
+        return storedValue ? storedValue : '';
+    });
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            localStorage.setItem('code', value);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [value]);
+
+    const onMount = (editor) => {
+        editorRef.current = editor;
+        editor.focus();
+    };
+
     const editorRef2 = useRef(null);
     const [fileName2, setFileName2] = useState("script2.js");
     const file2 = files2[fileName2];
+
     const editorRef3 = useRef(null);
     const [fileName3, setFileName3] = useState("script3.js");
     const file3 = files3[fileName3];
+
     const [problemCode, setProblemCode] = useState('');
     const [testCases, setTestCases] = useState([]);
 
@@ -206,10 +227,11 @@ const EditorPage = () => {
                         <Editor
                             height="90vh"
                             theme="vs-dark"
-                            path={file.name}
-                            defaultLanguage={file.language}
-                            defaultValue={file.value}
-                            onMount={(editor) => (editorRef.current = editor)}
+                            defaultLanguage="cpp"
+                            defaultValue={value}
+                            value={value}
+                            onMount={onMount}
+                            onChange={(value) => setValue(value)}
                         />
                 </div>
                 <div style={{fontFamily: "Manrope", height: "90vh", width: "35vw"}}>
