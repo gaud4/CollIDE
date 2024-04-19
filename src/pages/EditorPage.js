@@ -109,11 +109,11 @@ const EditorPage = () => {
     ];
 
     return (
-        <div style={{height: "100vh", width: "100vw"}}>
+        <div style={{height: "100vh", width: "100vw", fontFamily: "Manrope"}}>
             <div style={{height: "10vh", width: "100vw"}}>
-                <Navbar position="static" style={{backgroundColor:"#141414"}}>
+                <Navbar position="static" style={{backgroundColor:"#141414", fontFamily: "Manrope"}}>
                     <NavbarBrand>
-                        <p className="font-bold text-inherit">Coll-IDE</p>
+                        <p style={{fontFamily: "Manrope", fontSize: 25}}>Coll-IDE</p>
                     </NavbarBrand>
                     <NavbarContent justify="center">
                         <NavbarItem>
@@ -121,7 +121,7 @@ const EditorPage = () => {
                         </NavbarItem>
                         <NavbarItem>
                             <Button color="success" variant="flat" onPress={onOpen}>Fetch/Submit</Button>
-                            <Modal isOpen={isOpen} onOpenChange={onOpenChange} styles={{backgroundColor: "black"}}>
+                            <Modal isOpen={isOpen} onOpenChange={onOpenChange} styles={{backgroundColor: "black", fontFamily: "Manrope"}}>
                                 <ModalContent>
                                 {(onClose) => (
                                     <>
@@ -138,13 +138,13 @@ const EditorPage = () => {
                                                     className="max-w-xs"
                                                 />
                                             </div>
-                                            <div style={{display: "flex"}}>
-                                                <div style={{padding: "2vw"}}>
+                                            <div style={{display: "flex", fontFamily: "Manrope"}}>
+                                                <div style={{padding: "2vw", fontFamily: "Manrope"}}>
                                                     <Button color="primary" variant="flat">
                                                         Fetch Cases
                                                     </Button>
                                                 </div>
-                                                <div style={{padding: "2vw"}}>
+                                                <div style={{padding: "2vw", fontFamily: "Manrope"}}>
                                                     <Button color="primary" variant="flat">
                                                         Submit Code
                                                     </Button>
@@ -175,8 +175,8 @@ const EditorPage = () => {
                     </NavbarContent>
                 </Navbar>
             </div>
-            <div style={{height: "90vh", width: "100vw", display: "flex"}}>
-                <div style={{height: "90vh", width: "65vw", borderRight: "10px solid black"}}>
+            <div style={{height: "90vh", width: "100vw", display: "flex", fontFamily: "Manrope"}}>
+                <div style={{fontFamily: "Manrope", height: "90vh", width: "65vw", borderRight: "10px solid black"}}>
                         <Editor
                             height="90vh"
                             theme="vs-dark"
@@ -186,8 +186,8 @@ const EditorPage = () => {
                             onMount={(editor) => (editorRef.current = editor)}
                         />
                 </div>
-                <div style={{height: "90vh", width: "35vw"}}>
-                    <div style={{height: "40vh", width: "35vw"}}>
+                <div style={{fontFamily: "Manrope", height: "90vh", width: "35vw"}}>
+                    <div style={{fontFamily: "Manrope", height: "40vh", width: "35vw"}}>
                         <Editor
                             height="50vh"
                             theme="vs-dark"
@@ -197,7 +197,7 @@ const EditorPage = () => {
                             onMount={(editor) => (editorRef2.current = editor)}
                         />
                     </div>
-                    <div style={{height: "40vh", width: "35vw"}}>
+                    <div style={{fontFamily: "Manrope", height: "40vh", width: "35vw"}}>
                         <Editor
                             height="50vh"
                             theme="vs-dark"

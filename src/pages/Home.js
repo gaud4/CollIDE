@@ -42,18 +42,19 @@ const Home = () => {
     <div style={{ backgroundImage: `url(${backgroundImage})`, height: "100vh", width: "100vw"}}>
     <div style={{height: "100vh", width: "100vw", paddingLeft: "25vw", paddingRight: "25vw", paddingTop: "10vh", paddingBottom:" 10vh"}}>
       <div style={{height: "25vh", width: "50vw"}}>
-        <h1 style={{fontSize: 50, textAlign: "center"}}>Welcome, to Coll-IDE</h1>
-        <h1 style={{fontSize: 30, textAlign: "center"}}> (the IDE for real-time collaboration)</h1>
+        <h1 style={{fontSize: 50, textAlign: "center", fontFamily: "Manrope"}}>Welcome, to Coll-IDE</h1>
+        <h1 style={{fontSize: 30, textAlign: "center", fontFamily: "Manrope"}}> (the IDE for real-time collaboration)</h1>
       </div>
-      <div style={{height: "20vh", width: "50vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
-        <h1 style={{height: "20vh", width: "25vw", fontSize: 17, textAlign: "center", display: "grid", placeItems: "center", paddingLeft: "3vw", paddingRight: "3vw", paddingTop:"2vh", paddingBottom:"2vh"}}>
+      <div style={{fontFamily: "Manrope", height: "20vh", width: "50vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
+        <h1 style={{fontFamily: "Manrope", height: "20vh", width: "25vw", fontSize: 17, textAlign: "center", display: "grid", placeItems: "center", paddingLeft: "3vw", paddingRight: "3vw", paddingTop:"2vh", paddingBottom:"2vh"}}>
           Paste the ID for the Room that you want to join 
         </h1>
         <div style={{
             height:"20vh",
             width:"25vw",
             display: "grid",
-            placeItems: "center"}}>
+            placeItems: "center",
+            fontFamily: "Manrope"}}>
           <Input
             isRequired
             type="text"
@@ -66,15 +67,16 @@ const Home = () => {
           />
         </div>
       </div>
-      <div style={{height: "20vh", width: "50vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
-        <h1 style={{height: "20vh", width: "25vw", fontSize: 17, textAlign: "center", display: "grid", placeItems: "center", paddingLeft: "3vw", paddingRight: "3vw", paddingTop:"2vh", paddingBottom:"2vh"}}>
+      <div style={{fontFamily: "Manrope", height: "20vh", width: "50vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
+        <h1 style={{fontFamily: "Manrope", height: "20vh", width: "25vw", fontSize: 17, textAlign: "center", display: "grid", placeItems: "center", paddingLeft: "3vw", paddingRight: "3vw", paddingTop:"2vh", paddingBottom:"2vh"}}>
           Enter your username here
         </h1>
         <div style={{
             height:"20vh",
             width:"25vw",
             display: "grid",
-            placeItems: "center"}}>
+            placeItems: "center",
+            fontFamily: "Manrope"}}>
           <Input
             isRequired
             type="text"
@@ -89,13 +91,12 @@ const Home = () => {
       </div>
       <div style={{height: "15vh", width: "50vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
         <div style={{height: "15vh", width: "25vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
-        <Button color="success" onClick={createNewRoom} style={{ backgroundColor: "white", color: "black" }}>
+          <Button variant="light" onClick={createNewRoom} style={{border: "2px solid #707079", fontFamily: "Manrope"}}>
             Create Room
           </Button>
-          {/* <a onClick={createNewRoom}>create now </a> */}
         </div>
         <div style={{height: "15vh", width: "25vw", display: "flex", justifyContent: "center", alignContent: "center"}}>
-        <Button color="success" onClick={joinRoom} style={{ backgroundColor: "white", color: "black" }}>
+        <Button variant="light" onClick={joinRoom} style={{border: "2px solid #707079", fontFamily: "Manrope"}}>
             Join Room
           </Button>
         </div> 
