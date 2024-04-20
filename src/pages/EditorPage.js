@@ -1,228 +1,268 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import Client from '../components/Client';
-import Editor from '../components/Editor';
-import { language, cmtheme } from '../../src/atoms';
-import { useRecoilState } from 'recoil';
-// import { LanguageDropdown } from '../components/LanguageDropdown';
-// import { PostContext } from "../context/PostContext";
-import { initSocket } from '../socket';
+// App.js
+
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ACTIONS from '../Actions';
-import { useLocation , useNavigate , Navigate , useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { initSocket } from '../socket';
+import { useLocation , useNavigate , Navigate , useParams } from 'react-router-dom';
+import {Button} from "@nextui-org/react";
+import {Textarea} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
+import files from "./files";
+import files2 from "./files2";
+import files3 from "./files3";
+import Editor from "@monaco-editor/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link} from "@nextui-org/react";
+import axios from 'axios';
+import { FaPencilAlt } from "react-icons/fa";
 
 const EditorPage = () => {
-  const [lang, setLang] = useRecoilState(language);
-  const [them, setThem] = useRecoilState(cmtheme);
+    const [clients, setClients] = useState([]);
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const socketRef = useRef(null);
+    const codeRef = useRef(null);
+    const location = useLocation();
+    const { roomId } = useParams();
+    const reactNavigator = useNavigate();
 
-  const [clients, setClients] = useState([]);
+    const editorRef = useRef();
+    const [value, setValue] = useState(() => {
+        const storedValue = localStorage.getItem('code');
+        return storedValue ? storedValue : '';
+    });
 
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            localStorage.setItem('code', value);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [value]);
 
-  const socketRef = useRef(null);
-  const codeRef = useRef(null);
-  const location = useLocation();
-  const { roomId } = useParams();
-  const reactNavigator = useNavigate();
+    const onMount = (editor) => {
+        editorRef.current = editor;
+        editor.focus();
+    };
 
-//  const { setSelectedLanguage} =
-//    useContext(PostContext);
+    const editorRef2 = useRef(null);
+    const [fileName2, setFileName2] = useState("script2.js");
+    const file2 = files2[fileName2];
 
-  useEffect(() => {
-      const init = async () => {
-          socketRef.current = await initSocket();
-          socketRef.current.on('connect_error', (err) => handleErrors(err));
-          socketRef.current.on('connect_failed', (err) => handleErrors(err));
+    const editorRef3 = useRef(null);
+    const [fileName3, setFileName3] = useState("script3.js");
+    const file3 = files3[fileName3];
 
-          function handleErrors(e) {
-              console.log('socket error', e);
-              toast.error('Socket connection failed, try again later.');
-            //   reactNavigator('/');
-          }
+    const [problemCode, setProblemCode] = useState('');
+    const [testCases, setTestCases] = useState([]);
 
-          socketRef.current.emit(ACTIONS.JOIN, {
-              roomId,
-              username: location.state?.username,
-          });
+    useEffect(() => {
+        const init = async () => {
+            socketRef.current = await initSocket();
+            socketRef.current.on('connect_error', (err) => handleErrors(err));
+            socketRef.current.on('connect_failed', (err) => handleErrors(err));
 
-          // Listening for joined event
-          socketRef.current.on(
-              ACTIONS.JOINED,
-              ({ clients, username, socketId }) => {
-                  if (username !== location.state?.username) {
-                      toast.success(`${username} joined the room.`);
-                      console.log(`${username} joined`);
-                  }
-                  setClients(clients);
-                  socketRef.current.emit(ACTIONS.SYNC_CODE, {
-                      code: codeRef.current,
-                      socketId,
-                  });
-              }
-          );
+            function handleErrors(e) {
+                console.log('socket error', e);
+                toast.error('Socket connection failed, try again later.');
+            }
 
-          // Listening for disconnected
-          socketRef.current.on(
-              ACTIONS.DISCONNECTED,
-              ({ socketId, username }) => {
-                  toast.success(`${username} left the room.`);
-                  setClients((prev) => {
-                      return prev.filter(
-                          (client) => client.socketId !== socketId
-                      );
-                  });
-              }
-          );
-      };
-      init();
-      return () => {
-          socketRef.current.off(ACTIONS.JOINED);
-          socketRef.current.off(ACTIONS.DISCONNECTED);
-          socketRef.current.disconnect();
-      };
-  }, []);
+            socketRef.current.emit(ACTIONS.JOIN, {
+                roomId,
+                username: location.state?.username,
+            });
 
+            // Listening for joined event
+            socketRef.current.on(
+                ACTIONS.JOINED,
+                ({ clients, username, socketId }) => {
+                    if (username !== location.state?.username) {
+                        toast.success(`${username} joined the room.`);
+                        console.log(`${username} joined`);
+                    }
+                    setClients(clients);
+                    socketRef.current.emit(ACTIONS.SYNC_CODE, {
+                        code: codeRef.current,
+                        socketId,
+                    });
+                }
+            );
 
-  async function copyRoomId() {
-      try {
-          await navigator.clipboard.writeText(roomId);
-          toast.success('Room ID has been copied to your clipboard');
-      } catch (err) {
-          toast.error('Could not copy the Room ID');
-          console.error(err);
-      }
-  }
+            // Listening for disconnected
+            socketRef.current.on(
+                ACTIONS.DISCONNECTED,
+                ({ socketId, username }) => {
+                    toast.success(`${username} left the room.`);
+                    setClients((prev) => {
+                        return prev.filter(
+                            (client) => client.socketId !== socketId
+                        );
+                    });
+                }
+            );
+        };
 
-  function leaveRoom() {
-      reactNavigator('/');
-  }
+        init();
+        return () => {
+            socketRef.current.off(ACTIONS.JOINED);
+            socketRef.current.off(ACTIONS.DISCONNECTED);
+            socketRef.current.disconnect();
+        };
+    }, []);
 
+    async function copyRoomId() {
+        try {
+            await navigator.clipboard.writeText(roomId);
+            toast.success('Room ID has been copied to your clipboard');
+        } catch (err) {
+            toast.error('Could not copy the Room ID');
+            console.error(err);
+        }
+    }
 
-  if (!location.state) {
-      return <Navigate to="/" />;
-  }
+    function leaveRoom() {
+        reactNavigator('/');
+    }
 
-//  const onSelectChange = (sl) => {
-//    console.log("selected Option...", sl);
-//    setSelectedLanguage(sl);
-//  };
+    // if (!location.state) {
+    //     return <Navigate to="/" />;
+    // }
 
-  return (
-    <div className="mainWrap">
-            <div className="asideLeft">
-                <div className="asideLeftInner">
-                    <div className="logo">
-                      <img src='/code-editor-background4.gif' alt='background4' className='background4img'/>  
+    const fetchTestCases = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4000/scrape?problemCode=${problemCode}`);
+            // console.log("test case fetch success");
+            console.log(response.data);
+            const testCaseCode = response.data.join('\n');
+            editorRef2.current.setValue(testCaseCode);
+            setTestCases(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const submitCode = async () => {
+        const code = editorRef.current?.getValue();
+        try {
+            const response = await axios.post('http://localhost:4000/submit', { code, problemCode });
+            console.log(response.data);
+            toast.success('Code submitted successfully');
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to submit code');
+        }
+    };
+    return (
+        <div style={{height: "100vh", width: "100vw", fontFamily: "Manrope"}}>
+            <div style={{height: "10vh", width: "100vw"}}>
+                <Navbar position="static" style={{backgroundColor:"#141414", fontFamily: "Manrope"}}>
+                    <NavbarBrand>
+                        <p style={{fontFamily: "Manrope", fontSize: 25}}>Coll-IDE</p>
+                    </NavbarBrand>
+                    <NavbarContent justify="center">
+                        <NavbarItem>
+                        
+                        <FaPencilAlt onClick={() => reactNavigator(`/whiteboard/${roomId}`)} />
+                        </NavbarItem>
+                        <NavbarItem>
+                            <Button color="success" variant="flat" >Run Code</Button>
+                        </NavbarItem>
+                        <NavbarItem>
+                            <Button color="success" variant="flat" onPress={onOpen}>Fetch/Submit</Button>
+                            <Modal isOpen={isOpen} onOpenChange={onOpenChange} styles={{backgroundColor: "black", fontFamily: "Manrope"}}>
+                                <ModalContent>
+                                {(onClose) => (
+                                    <>
+                                    <ModalHeader className="flex flex-col gap-1">Fetch/Submit</ModalHeader>
+                                    <ModalBody>
+                                        <div styles={{justifyContent: "center", alignContent: "center"}}>
+                                            <div>
+                                                <Textarea
+                                                    isRequired
+                                                    label=""
+                                                    variant="underlined"
+                                                    labelPlacement="outside"
+                                                    placeholder="Enter the Problem ID"
+                                                    className="max-w-xs"
+                                                    value={problemCode}
+                                                    onChange={(e) => setProblemCode(e.target.value)}
+                                                />
+                                            </div>
+                                            <div style={{display: "flex", fontFamily: "Manrope"}}>
+                                                <div style={{padding: "2vw", fontFamily: "Manrope"}}>
+                                                    <Button color="primary" variant="flat" onClick={fetchTestCases}>
+                                                        Fetch Cases
+                                                    </Button>
+                                                </div>
+                                                <div style={{padding: "2vw", fontFamily: "Manrope"}}>
+                                                    <Button color="primary" variant="flat" onClick={submitCode}>
+                                                        Submit Code
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="danger" variant="light" onPress={onClose}>
+                                            Close
+                                        </Button>
+                                    </ModalFooter>
+                                    </>
+                                )}
+                                </ModalContent>
+                            </Modal>
+                        </NavbarItem>
+                        <NavbarItem>
+                            <Button color="success" variant="flat" onClick={copyRoomId}>Copy Room ID</Button>
+                        </NavbarItem>
+                        
+                    </NavbarContent>
+                    <NavbarContent justify="end">
+                        <NavbarItem>
+                            <Button color="danger"  className="m-4" onClick={leaveRoom}>Leave</Button>
+                        </NavbarItem>
+                    </NavbarContent>
+                </Navbar>
+            </div>
+            <div style={{height: "90vh", width: "100vw", display: "flex", fontFamily: "Manrope"}}>
+                <div style={{fontFamily: "Manrope", height: "90vh", width: "65vw", borderRight: "10px solid black"}}>
+                        <Editor
+                            height="90vh"
+                            theme="vs-dark"
+                            defaultLanguage="cpp"
+                            defaultValue={value}
+                            value={value}
+                            onMount={onMount}
+                            onChange={(value) => setValue(value)}
+                        />
+                </div>
+                <div style={{fontFamily: "Manrope", height: "90vh", width: "35vw"}}>
+                    <div style={{fontFamily: "Manrope", height: "40vh", width: "35vw"}}>
+                        <Editor
+                            height="50vh"
+                            theme="vs-dark"
+                            path={file2.name}
+                            defaultLanguage={file2.language}
+                            defaultValue={file2.value}
+                            onMount={(editor) => (editorRef2.current = editor)}
+                        />
                     </div>
-                    <h3>Connected</h3>
-                    <div className="clientsList">
-                        {clients.map((client) => (
-                            <Client
-                                key={client.socketId}
-                                username={client.username}
-                            />
-                        ))}
+                    <div style={{fontFamily: "Manrope", height: "40vh", width: "35vw"}}>
+                        <Editor
+                            height="50vh"
+                            theme="vs-dark"
+                            path={file3.name}
+                            defaultLanguage={file3.language}
+                            defaultValue={file3.value}
+                            onMount={(editor) => (editorRef3.current = editor)}
+                        />
                     </div>
                 </div>
-
-                <label>
-                    Select Language:
-                    <select value={lang} onChange={(e) => { setLang(e.target.value); window.location.reload(); }} className="seLang">
-                        <option value="clike">GNU G++20 13.2 (64 bit)</option>
-                        <option value="python">Python</option>
-                    </select>
-                </label>
-
-                <label>
-                    Select Theme:
-                    <select value={them} onChange={(e) => { setThem(e.target.value); window.location.reload(); }} className="seLang">
-                        <option value="default">default</option>
-                        <option value="dracula">dracula</option>
-                        <option value="3024-day">3024-day</option>
-                        <option value="3024-night">3024-night</option>
-                        <option value="abbott">abbott</option>
-                        <option value="abcdef">abcdef</option>
-                        <option value="ambiance">ambiance</option>
-                        <option value="ayu-dark">ayu-dark</option>
-                        <option value="ayu-mirage">ayu-mirage</option>
-                        <option value="base16-dark">base16-dark</option>
-                        <option value="base16-light">base16-light</option>
-                        <option value="bespin">bespin</option>
-                        <option value="blackboard">blackboard</option>
-                        <option value="cobalt">cobalt</option>
-                        <option value="colorforth">colorforth</option>
-                        <option value="darcula">darcula</option>
-                        <option value="duotone-dark">duotone-dark</option>
-                        <option value="duotone-light">duotone-light</option>
-                        <option value="eclipse">eclipse</option>
-                        <option value="elegant">elegant</option>
-                        <option value="erlang-dark">erlang-dark</option>
-                        <option value="gruvbox-dark">gruvbox-dark</option>
-                        <option value="hopscotch">hopscotch</option>
-                        <option value="icecoder">icecoder</option>
-                        <option value="idea">idea</option>
-                        <option value="isotope">isotope</option>
-                        <option value="juejin">juejin</option>
-                        <option value="lesser-dark">lesser-dark</option>
-                        <option value="liquibyte">liquibyte</option>
-                        <option value="lucario">lucario</option>
-                        <option value="material">material</option>
-                        <option value="material-darker">material-darker</option>
-                        <option value="material-palenight">material-palenight</option>
-                        <option value="material-ocean">material-ocean</option>
-                        <option value="mbo">mbo</option>
-                        <option value="mdn-like">mdn-like</option>
-                        <option value="midnight">midnight</option>
-                        <option value="monokai">monokai</option>
-                        <option value="moxer">moxer</option>
-                        <option value="neat">neat</option>
-                        <option value="neo">neo</option>
-                        <option value="night">night</option>
-                        <option value="nord">nord</option>
-                        <option value="oceanic-next">oceanic-next</option>
-                        <option value="panda-syntax">panda-syntax</option>
-                        <option value="paraiso-dark">paraiso-dark</option>
-                        <option value="paraiso-light">paraiso-light</option>
-                        <option value="pastel-on-dark">pastel-on-dark</option>
-                        <option value="railscasts">railscasts</option>
-                        <option value="rubyblue">rubyblue</option>
-                        <option value="seti">seti</option>
-                        <option value="shadowfox">shadowfox</option>
-                        <option value="solarized">solarized</option>
-                        <option value="the-matrix">the-matrix</option>
-                        <option value="tomorrow-night-bright">tomorrow-night-bright</option>
-                        <option value="tomorrow-night-eighties">tomorrow-night-eighties</option>
-                        <option value="ttcn">ttcn</option>
-                        <option value="twilight">twilight</option>
-                        <option value="vibrant-ink">vibrant-ink</option>
-                        <option value="xq-dark">xq-dark</option>
-                        <option value="xq-light">xq-light</option>
-                        <option value="yeti">yeti</option>
-                        <option value="yonce">yonce</option>
-                        <option value="zenburn">zenburn</option>
-                    </select>
-                </label>
-
-                <button className="btn copyBtn" onClick={copyRoomId}>
-                    Copy ROOM ID
-                </button>
-                <button className="btn leaveBtn" onClick={leaveRoom}>
-                    Leave
-                </button>
-
-                
-            </div>
-
-            <div className="editorWrap">
-                <Editor
-                    socketRef={socketRef}
-                    roomId={roomId}
-                    onCodeChange={(code) => {
-                        codeRef.current = code;
-                    }}
-                />
             </div>
         </div>
-    
-  )
+    );
 };
 
 export default EditorPage;

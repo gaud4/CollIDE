@@ -1,53 +1,3 @@
-.homePageWrapper {
-    color: aliceblue;
-    height: 100vh;
-    align-items: center;
-    
-}
-
-.background1img {
-    height: 100px;
-    width: 100px;
-}
-
-.background4 {
-    /*width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-    padding-left: 100px;
-    padding-right: 100px;
-    background: #282a36;
-    border-radius: 30px;
-    margin: 20px;
-    transition: all 0.5s ease-out;*/
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.name {
-    font-style: bold;
-    font-weight: bolder;
-}
-
-h1 {
-    font-size: 35px;
-}
-
-.background4img {
-    width: 200px;
-    height: 200px;
-    align-items: center;
-}
-
 .formWrapper {
     width: 600px;
     display: flex;
@@ -61,34 +11,9 @@ h1 {
     transition: all 0.5s ease-out;
 }
 
-.formWrapper:hover {
-    background: rgb(32,33,36);
-}
-
-.background3img {
-    width: 90%;
-    height: 20%;
-    align-items: center;
-    margin: 1%;
-    margin-left: 4%;
-    border-radius: 15px;
-    margin-bottom: 4%;
-}
-
 .inputGroup {
     display: flex;
     flex-direction: column;
-}
-
-.mainLabel {
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-.homePageLogo {
-    height: 200px;
-    width: 350px;
-    margin-bottom: 10px;
 }
 
 .inputBox {
@@ -104,56 +29,6 @@ h1 {
     width: 70vh;
 }
 
-h3{
-    margin: 0 auto;
-    margin-top: 20px;
-}
-
-.btn {
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    font-weight: bold;
-
-}
-
-.joinBtn {
-    background: #4aed88;
-    width: 100px;
-    margin-left: auto;
-
-}
-
-.joinBtn:hover {
-    background: #2b824c;
-}
-
-.createInfo {
-    margin: 0 auto;
-    margin-bottom: 10px;
-}
-
-.createNewBtn {
-    color: #4aed88;
-    text-decoration: none;
-    border-bottom: 1px solid #4aed88;
-    transition: all 0.3s ease-in-out;
-
-}
-
-.createNewBtn:hover {
-    color: #2b824c;
-    border-color: #2b824c;
-}
-
-.mainWrap {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    height: 100vh;
-}
 
 
 .asideLeft {
@@ -161,6 +36,7 @@ h3{
     padding: 16px;
     color: #fff;
     display: flex;
+    width: 20vw;
     flex-direction: column;
 }
 
@@ -195,29 +71,6 @@ h3{
     text-align-last: center;
 }
 
-
-.logo {
-    border-bottom: 1px solid #121212;
-    padding-bottom: 10px;
-}
-
-.editorPageLogo {
-    height: 20vh;
-}
-
-.leaveBtn {
-    margin-top: 10px;
-    background: #4aed88;
-}
-
-.copyBtn {
-    background: #4aed88;
-}
-
-.leaveBtn:hover , .copyBtn:hover {
-    background: #2b824c;
-}
-
 .language-dropdown{
     margin: 10px;
     width: 40%;
@@ -231,4 +84,3 @@ h3{
     font-size: 15px;
     line-height: 1.6;
 }
-

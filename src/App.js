@@ -4,14 +4,15 @@ import Home from './pages/Home';
 import EditorPage from './pages/EditorPage';
 import './App.css'
 import { Toaster } from 'react-hot-toast';
-import { PostContextProvider } from './context/PostContext'
 import { RecoilRoot } from 'recoil';
-
-
+import Penciltool from './pages/Penciltool'
+import {NextUIProvider} from "@nextui-org/react";
+import WhiteBoard from './pages/WhiteBoard';
 
 const App = () => {
   return (
-    <>
+    <NextUIProvider>
+      <main className="dark text-foreground bg-background">
       <div>
         <Toaster 
           position='top-right'
@@ -33,11 +34,14 @@ const App = () => {
                             path="/editor/:roomId"
                             element={<EditorPage />}
                         ></Route>
+                        <Route path="/whiteboard/:roomId" element={<WhiteBoard/>}></Route>
                     </Routes>
                 </RecoilRoot>
       </BrowserRouter>
 
-    </>
+      </main>
+    </NextUIProvider>
+    // <Penciltool/>
   );
 }
 
