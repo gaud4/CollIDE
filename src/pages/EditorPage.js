@@ -3,6 +3,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ACTIONS from '../Actions';
 import toast from 'react-hot-toast';
+import { useRecoilValue } from 'recoil';
 import { initSocket } from '../socket';
 import { useLocation , useNavigate , Navigate , useParams } from 'react-router-dom';
 import {Button} from "@nextui-org/react";
@@ -104,6 +105,7 @@ const EditorPage = () => {
         };
 
         init();
+        // console.log("hehehe");
         return () => {
             socketRef.current.off(ACTIONS.JOINED);
             socketRef.current.off(ACTIONS.DISCONNECTED);
@@ -153,6 +155,92 @@ const EditorPage = () => {
             toast.error('Failed to submit code');
         }
     };
+
+    // const editorRef = useRef(null);
+    // const lang = useRecoilValue(language);
+    // const editorTheme = useRecoilValue(cmtheme);
+
+    // useEffect(() => {
+    //     async function init() {
+    //         editorRef.current = Codemirror.fromTextArea(
+    //             document.getElementById('realtimeEditor'),
+    //             {
+    //                 mode: { name: lang },
+    //                 theme: editorTheme,
+    //                 autoCloseTags: true,
+    //                 autoCloseBrackets: true,
+    //                 lineNumbers: true,
+    //             }
+    //         );
+
+    //         editorRef.current.on('change', (instance, changes) => {
+    //             const { origin } = changes;
+    //             const code = instance.getValue();
+    //             onCodeChange(code);
+    //             if (origin !== 'setValue') {
+    //                 socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+    //                     roomId,
+    //                     code,
+    //                 });
+    //             }
+    //         });
+
+    //     }
+    //     init();
+    // }, [lang]);
+
+
+    function setPostContent(code) {
+        // console.log("heya")
+        // socketRef.current.emit(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
+        //     console.log("code change event sent")
+        //     // socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
+        // });
+        console.log(value)
+        console.log(code)
+        if(value != code )
+        {        
+                setValue(code)
+                console.log("upadated value " + value)
+                // editorRef.current.on('change', (instance, changes) => {
+                //     console.log("sdasd");
+                //     const { origin } = changes;
+                //     const code = instance.getValue();
+                //     // onCodeChange(code);
+                    // if (origin !== 'setValue') {
+                        socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+                            roomId,
+                            code,
+                        });
+                    // // }
+                // });
+}
+    }
+//     init();
+// });
+
+    useEffect(() => {
+        console.log("Sdasdasdasd")
+        if (socketRef.current) {
+            socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+                
+                if (code !== null && code != editorRef.current.getValue() ) {
+                    console.log(roomId + code)
+                    editorRef.current.setValue(code);
+                    // socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+                    //     roomId,
+                    //     code,
+                    // });
+                }
+            });
+        }
+
+        return () => {
+            socketRef.current.off(ACTIONS.CODE_CHANGE);
+        };
+    }, [socketRef.current]);
+
+
     return (
         <div style={{height: "100vh", width: "100vw", fontFamily: "Manrope"}}>
             <div style={{height: "10vh", width: "100vw"}}>
@@ -186,7 +274,7 @@ const EditorPage = () => {
                                                     placeholder="Enter the Problem ID"
                                                     className="max-w-xs"
                                                     value={problemCode}
-                                                    onChange={(e) => setProblemCode(e.target.value)}
+                                                    onChange={(e) =>   setProblemCode(e.target.value)}
                                                 />
                                             </div>
                                             <div style={{display: "flex", fontFamily: "Manrope"}}>
@@ -235,7 +323,7 @@ const EditorPage = () => {
                             defaultValue={value}
                             value={value}
                             onMount={onMount}
-                            onChange={(value) => setValue(value)}
+                            onChange={(value) => setPostContent(value)}
                         />
                 </div>
                 <div style={{fontFamily: "Manrope", height: "90vh", width: "35vw"}}>
