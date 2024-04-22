@@ -188,7 +188,33 @@ const EditorPage = () => {
     //     }
     //     init();
     // }, [lang]);
+    var response;
+    async function runcode() {
 
+        const code = editorRef.current?.getValue();
+        const input = editorRef2.current?.getValue();
+        console.log(code)
+        console.log(input)
+        const data = {
+            code: code,
+            input: input
+        };
+
+        
+        try {
+            toast.success('Running the code');
+            response = (await axios.post('http://localhost:4000/runCode', data ));
+            console.log(response.data);
+            
+            editorRef3.current?.setValue(response.data)
+        } catch (error) {
+            console.log(error);
+            if(error.response.status == 400){
+                toast.error('One of Feild is empty');
+            }else 
+            toast.error('Failed to run code');
+        }
+    }
 
     function setPostContent(code) {
         // console.log("heya")
@@ -254,7 +280,7 @@ const EditorPage = () => {
                         <FaPencilAlt onClick={() => reactNavigator(`/whiteboard/${roomId}`)} />
                         </NavbarItem>
                         <NavbarItem>
-                            <Button color="success" variant="flat" >Run Code</Button>
+                            <Button color="success" variant="flat" onClick={runcode} >Run Code</Button>
                         </NavbarItem>
                         <NavbarItem>
                             <Button color="success" variant="flat" onPress={onOpen}>Fetch/Submit</Button>
