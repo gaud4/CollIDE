@@ -4,7 +4,8 @@ const Penciltool = () => {
   const [drawing, setDrawing] = useState(false);
   const [prevPos, setPrevPos] = useState({ x: 0, y: 0 });
   const contextRef = useRef(null);
-
+  const [canva, setCanva] = useState('');
+   
   useEffect(() => {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -23,7 +24,32 @@ const Penciltool = () => {
 
   const finishDrawing = () => {
     setDrawing(false);
+    const json = JSON.stringify(this.points);
+    if(canva != json){
+      setCanva(json)
+    }
   };
+
+//   useEffect(() => {
+//     console.log("Sdasdasdasd")
+//     if (socketRef.current) {
+//         socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+            
+//             if (code !== null && code != editorRef.current.getValue() ) {
+//                 console.log(roomId + code)
+//                 editorRef.current.setValue(code);
+//                 // socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+//                 //     roomId,
+//                 //     code,
+//                 // });
+//             }
+//         });
+//     }
+
+//     return () => {
+//         socketRef.current.off(ACTIONS.CODE_CHANGE);
+//     };
+// }, [socketRef.current]);
 
   const draw = (event) => {
     if (!drawing) return;

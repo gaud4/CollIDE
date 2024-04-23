@@ -1,5 +1,4 @@
 const express = require('express');
-
 const bcrypt = require('bcrypt');
 const collections = require("./mongo")
 const CodeFile = require('./CodeFile');
@@ -11,7 +10,9 @@ const puppeteer = require('puppeteer-extra');
 const MinMaxPlugin = require('puppeteer-extra-plugin-minmax');
 const fs = require('fs');
 const cors = require('cors');
+const { exec } = require('child_process');
 const http = require('http');
+const { execSync } = require('child_process');
 const { Server } = require('socket.io');
 //app.use(express.urlencoded({ extended: true }))
 const PORT = process.env.PORT || 5000;
@@ -27,6 +28,8 @@ app.use(express.json());
 
 let browser;
 let page;
+var output;
+
 
 app.get("/",cors(),(req,res)=>{
 
@@ -212,6 +215,71 @@ app.get('/scrape', async (req, res) => {
         res.status(500).send('Error occurred while scraping');
     }
 });
+
+app.post('/runCode', async (req, res) => {
+    bodyParser.json()
+    const { code, input } = req.body;
+    // console.log(req.body)
+    // console.log(code)
+    // console.log(input)
+    if (!code || !input) {
+        return res.status(400).json({ error: 'Both code and input fields are required.' });
+    }
+
+    try {
+        await runn(code, input);
+        console.log("result " + output)
+        return res.status(200).send("Output : \n" + output );
+    } catch (error) {
+        console.log("internal server error " + error)
+        return res.status(500).send({ error: 'Internal server error.' });
+    }
+});
+
+// async function callRun(code , input ){
+//     output = await runn(code , input)
+//     return output
+// }
+async function runn(code, input) {
+    fs.writeFileSync('code.cpp', code);
+    // var result
+   
+    try {
+        // execSync('g++ code.cpp -o code', { stdio: 'ignore' });
+        exec('g++ code.cpp -o code', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error: ${error.message}`);
+                output = error.message
+                fs.writeFileSync('output.txt', output);
+                // console.log(output)
+                return ('Execution error: ' + output);
+            }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`);
+                // return;
+                output = 'Execution error: ' + stderr;
+                fs.writeFileSync('output.txt', output);
+                return 'Execution error: ' + stderr;
+            }
+            output = stdout
+            console.log(`stdout:\n${stdout}`);
+            fs.writeFileSync('output.txt', stdout);
+            try {
+                const result = execSync(`./code`, { input }).toString();
+                console.log(result)
+                output = result.trim();
+                return result.trim();
+            } catch (error) {
+                output ='Execution error: ' + error.message; 
+                return 'Execution error: ' + error.message;
+            }
+        });
+    } catch (error) {
+        output = 'Compilation error: \n' + error.message;
+        return output
+    }
+}
+
 
 app.post('/submit', async (req, res) => {
     const { code, problemCode } = req.body;

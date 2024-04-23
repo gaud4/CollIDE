@@ -113,23 +113,24 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const lang = useRecoilValue(language);
     const editorTheme = useRecoilValue(cmtheme);
 
-    useEffect(() => {
-        async function init() {
-            editorRef.current = Codemirror.fromTextArea(
-                document.getElementById('realtimeEditor'),
-                {
-                    mode: { name: lang },
-                    theme: editorTheme,
-                    autoCloseTags: true,
-                    autoCloseBrackets: true,
-                    lineNumbers: true,
-                }
-            );
+    // useEffect(() => {
+        function setPostContent() {
+            // editorRef.current = Codemirror.fromTextArea(
+            //     document.getElementById('realtimeEditor'),
+            //     {
+            //         mode: { name: lang },
+            //         theme: editorTheme,
+            //         autoCloseTags: true,
+            //         autoCloseBrackets: true,
+            //         lineNumbers: true,
+            //     }
+            // );
 
             editorRef.current.on('change', (instance, changes) => {
+                console.log("sdasd");
                 const { origin } = changes;
                 const code = instance.getValue();
-                onCodeChange(code);
+                // onCodeChange(code);
                 if (origin !== 'setValue') {
                     socketRef.current.emit(ACTIONS.CODE_CHANGE, {
                         roomId,
@@ -139,8 +140,8 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             });
 
         }
-        init();
-    }, [lang]);
+    //     init();
+    // });
 
 
 
@@ -161,7 +162,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
 
 
     return (
-            <textarea id="realtimeEditor"></textarea>
+            <textarea id="realtimeEditor"  onChange={e => setPostContent(e.target.value)}></textarea>
     );
 };
 
