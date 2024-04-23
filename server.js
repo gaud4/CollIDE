@@ -34,7 +34,7 @@ async function launchBrowserAndWaitForLogin() {
     console.log("Please log in to Codeforces in the opened browser window.");
 }
 
-// launchBrowserAndWaitForLogin().catch(console.error);
+launchBrowserAndWaitForLogin().catch(console.error);
 
 app.get('/scrape', async (req, res) => {
     const problemCode = req.query.problemCode;
