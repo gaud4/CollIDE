@@ -4,7 +4,7 @@ const Penciltool = () => {
   const [drawing, setDrawing] = useState(false);
   const [prevPos, setPrevPos] = useState({ x: 0, y: 0 });
   const contextRef = useRef(null);
-  const [canva, setCanva] = useState('');
+  // const [canva, setCanva] = useState('');
    
   useEffect(() => {
     const canvas = document.getElementById('canvas');
@@ -24,10 +24,10 @@ const Penciltool = () => {
 
   const finishDrawing = () => {
     setDrawing(false);
-    const json = JSON.stringify(this.points);
-    if(canva != json){
-      setCanva(json)
-    }
+    // const json = JSON.stringify(this.points);
+    // if(canva != json){
+    //   setCanva(json)
+    // }
   };
 
 //   useEffect(() => {
