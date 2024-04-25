@@ -191,7 +191,7 @@ async function launchBrowserAndWaitForLogin() {
     console.log("Please log in to Codeforces in the opened browser window.");
 }
 
-launchBrowserAndWaitForLogin().catch(console.error);
+// launchBrowserAndWaitForLogin().catch(console.error);
 
 app.get('/scrape', async (req, res) => {
     const problemCode = req.query.problemCode;
@@ -220,8 +220,8 @@ app.post('/runCode', async (req, res) => {
     bodyParser.json()
     const { code, input } = req.body;
     // console.log(req.body)
-    // console.log(code)
-    // console.log(input)
+    console.log(code)
+    console.log(input)
     if (!code || !input) {
         return res.status(400).json({ error: 'Both code and input fields are required.' });
     }

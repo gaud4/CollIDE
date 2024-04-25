@@ -16,6 +16,7 @@ int main(){
   
   int t=0;
   cin >>t;
+  cout <<t;
   for (int p=0 ; p<t; p++){
     int x=0;
     cin >>x;
