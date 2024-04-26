@@ -202,10 +202,12 @@ const EditorPage = () => {
 
         
         try {
-            toast.success('Running the code');
+            
             response = (await axios.post('http://localhost:5000/runCode', data ));
             console.log(response.data);
-            
+            if(response.data == ""){}
+            else
+            toast.success('Running the code');
             editorRef3.current?.setValue(response.data)
         } catch (error) {
             console.log(error);
