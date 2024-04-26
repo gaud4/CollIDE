@@ -133,7 +133,7 @@ const EditorPage = () => {
 
     const fetchTestCases = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/scrape?problemCode=${problemCode}`);
+            const response = await axios.get(`http://localhost:5000/scrape?problemCode=${problemCode}`);
             // console.log("test case fetch success");
             console.log(response.data);
             const testCaseCode = response.data.join('\n');
@@ -147,7 +147,7 @@ const EditorPage = () => {
     const submitCode = async () => {
         const code = editorRef.current?.getValue();
         try {
-            const response = await axios.post('http://localhost:4000/submit', { code, problemCode });
+            const response = await axios.post('http://localhost:5000/submit', { code, problemCode });
             console.log(response.data);
             toast.success('Code submitted successfully');
         } catch (error) {
@@ -202,10 +202,12 @@ const EditorPage = () => {
 
         
         try {
-            toast.success('Running the code');
-            response = (await axios.post('http://localhost:4000/runCode', data ));
-            console.log(response.data);
             
+            response = (await axios.post('http://localhost:5000/runCode', data ));
+            console.log(response.data);
+            if(response.data == ""){}
+            else
+            toast.success('Running the code');
             editorRef3.current?.setValue(response.data)
         } catch (error) {
             console.log(error);

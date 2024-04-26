@@ -229,7 +229,11 @@ app.post('/runCode', async (req, res) => {
     try {
         await runn(code, input);
         console.log("result " + output)
-        return res.status(200).send("Output : \n" + output );
+        if(output == undefined){
+            return res.status(200).send("");
+        }
+        else
+            return res.status(200).send("Output : \n" + output );
     } catch (error) {
         console.log("internal server error " + error)
         return res.status(500).send({ error: 'Internal server error.' });
