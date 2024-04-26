@@ -10,6 +10,8 @@ void solve(int x){
   cout << x;
 }
 
+// void so
+
 int main(){
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
