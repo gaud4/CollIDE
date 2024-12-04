@@ -1,0 +1,4 @@
+Command failed: g++ code.cpp -o code
+code.cpp:1:1: error: ‘aasdasdasdasdasdasdasdasdasdsaasdasdasdasdasdasdasdasdasdsaasdasdasdasdasdasdasdasdasdsaasdasdasdasdasdasdasdasdasds’ does not name a type
+    1 | aasdasdasdasdasdasdasdasdasdsaasdasdasdasdasdasdasdasdasdsaasdasdasdasdasdasdasdasdasdsaasdasdasdasdasdasdasdasdasds
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

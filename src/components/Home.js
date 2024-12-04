@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Correct import
 
 function Home() {
   const [files, setFiles] = useState([]);
-  const [filename, setFilename] = useState('');
-  const [language, setLanguage] = useState('');
-  const [content, setContent] = useState('');
+  const [filename, setFilename] = useState("");
+  const [language, setLanguage] = useState("");
+  const [content, setContent] = useState("");
+  const { token, login, logout } = useAuth();
 
   // Function to handle file creation
   const handleCreateFile = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/create',
+        "http://localhost:5000/create",
         {
           filename,
           language,
@@ -20,25 +22,25 @@ function Home() {
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
-      alert('File created successfully!');
+      alert("File created successfully!");
       setFiles([...files, response.data]);
     } catch (error) {
-      console.error('Error creating file:', error);
-      alert('Error creating file. Please try again.');
+      console.error("Error creating file:", error);
+      alert("Error creating file. Please try again.");
     }
   };
 
   // Function to fetch files from the server
   const fetchFiles = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/files');
+      const response = await axios.get("http://localhost:5000/files");
       setFiles(response.data);
     } catch (error) {
-      console.error('Error fetching files:', error);
+      console.error("Error fetching files:", error);
     }
   };
 
@@ -88,18 +90,13 @@ function Home() {
       <ul>
         {files.map((file) => (
           <li key={file._id}>
-            <strong>Filename:</strong> {file.filename},{' '}
+            <strong>Filename:</strong> {file.filename},{" "}
             <strong>Language:</strong> {file.language}
           </li>
         ))}
       </ul>
 
-      
-        
-            <Link to="/fileoutput">HomeOutput</Link>
-        
-      
-    
+      <Link to="/fileoutput">HomeOutput</Link>
     </div>
   );
 }
