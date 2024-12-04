@@ -5,10 +5,10 @@ import { useAuth } from "../context/AuthContext"; // Correct import
 
 function Home() {
   const [files, setFiles] = useState([]);
-  const [filename, setFilename] = useState("");
-  const [language, setLanguage] = useState("");
+  const [room, setRoom] = useState("");
+  //const [language, setLanguage] = useState("");
   const [content, setContent] = useState("");
-  const { token, login, logout } = useAuth();
+  //const { token, login, logout } = useAuth();
 
   // Function to handle file creation
   const handleCreateFile = async () => {
@@ -16,8 +16,7 @@ function Home() {
       const response = await axios.post(
         "http://localhost:5000/create",
         {
-          filename,
-          language,
+          room,
           content,
         },
         {
@@ -53,23 +52,23 @@ function Home() {
     <div>
       <h1>Create Code File</h1>
       <form>
-        <label htmlFor="filename">Filename:</label>
+        <label htmlFor="room">room:</label>
         <input
           type="text"
-          id="filename"
-          value={filename}
-          onChange={(e) => setFilename(e.target.value)}
+          id="room"
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
           required
         />
         <br />
-        <label htmlFor="language">Language:</label>
+        {/* <label htmlFor="language">Language:</label>
         <input
           type="text"
           id="language"
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
           required
-        />
+        /> */}
         <br />
         <label htmlFor="content">Code:</label>
         <br />
@@ -90,8 +89,7 @@ function Home() {
       <ul>
         {files.map((file) => (
           <li key={file._id}>
-            <strong>Filename:</strong> {file.filename},{" "}
-            <strong>Language:</strong> {file.language}
+            <strong>room:</strong> {file.room}
           </li>
         ))}
       </ul>

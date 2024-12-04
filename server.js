@@ -257,24 +257,67 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// app.post("/create", async (req, res) => {
+//   try {
+//     console.log("/create was used");
+//     const { room, content } = req.body;
+//     const newCodeFile = new CodeFile({
+//       room,
+//       content,
+//     });
+
+//     const fileExists = await CodeFile.findOne({ room });
+//     console.log(fileExists);
+
+//     if (!fileExists) {
+//       console.log("not exists");
+//       const savedFile = await newCodeFile.save();
+//       res.status(201).send(savedFile);
+//     } else {
+//       console.log("already exists");
+//       res.status(200).json({ error: "already exists" });
+//     }
+//   } catch (error) {
+//     console.log("Error creating file:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
 app.post("/create", async (req, res) => {
   try {
-    const { filename, content, language } = req.body;
-    const newCodeFile = new CodeFile({
-      filename,
-      content,
-      language,
-    });
-    const savedFile = await newCodeFile.save();
-    res.status(201).send(savedFile);
+    console.log("/create was used");
+    const { room, content } = req.body;
+
+    // Validate input
+    if (!room || typeof room !== "string" || room.trim() === "") {
+      return res
+        .status(400)
+        .json({ error: "Room name is required and must be valid." });
+    }
+
+    // Check if the file already exists
+    const fileExists = await CodeFile.findOne({ room });
+    console.log(fileExists);
+
+    if (!fileExists) {
+      console.log("not exists");
+      // Create and save new file only if it doesn't exist
+      const newCodeFile = new CodeFile({ room, content });
+      const savedFile = await newCodeFile.save();
+      res.status(201).send(savedFile);
+    } else {
+      console.log("already exists");
+      res.status(300).json({ error: "already exists" });
+    }
   } catch (error) {
-    console.error("Error creating file:", error);
+    console.log("Error creating file:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
 // Define a GET endpoint to retrieve files
 app.get("/files", async (req, res) => {
+  //console.log("123123asdasd");
   try {
     const files = await CodeFile.find();
     res.json(files);
@@ -290,6 +333,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/files/:id", async (req, res) => {
+  //console.log("123123asdasd");
   try {
     const fileId = req.params.id; // Extract file ID from the request params
 
@@ -306,6 +350,21 @@ app.get("/files/:id", async (req, res) => {
   } catch (error) {
     console.error("Error retrieving file:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.delete("/files/:id", async (req, res) => {
+  //console.log("123123asdasd");
+  const fileId = req.params.id;
+  try {
+    // Logic to delete file from the database
+    const result = await CodeFile.findByIdAndDelete(fileId);
+    if (!result) {
+      return res.status(404).send({ message: "File not found" });
+    }
+    res.status(200).send({ message: "File deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
@@ -348,6 +407,26 @@ app.listen(8000, () => {
 //         res.status(500).send('Error occurred while scraping');
 //     }
 // });
+
+app.post("/fileExist", async (req, res) => {
+  try {
+    const { room } = req.body;
+
+    // Check if the room exists in the database
+    const file = await CodeFile.findOne({ room });
+
+    if (file) {
+      // If room exists, send its content
+      res.status(200).json({ exists: true, content: file.content });
+    } else {
+      // If room does not exist, send a response indicating so
+      res.status(200).json({ exists: false });
+    }
+  } catch (error) {
+    console.error("Error checking room existence:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 app.post("/runCode", async (req, res) => {
   const { code, input } = req.body;

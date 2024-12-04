@@ -24,7 +24,7 @@ const validateToken = (token) => {
     return true;
   } catch (error) {
     console.error("Invalid token:", error.message);
-    alert("Please Login First");
+    toast.error("Please Login First");
     return false;
   }
 };
