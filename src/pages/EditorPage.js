@@ -66,6 +66,8 @@ const EditorPage = () => {
         room, // Send the room as input
       });
 
+      console.log(response);
+
       if (response.data.exists) {
         // If the room exists, log or use the content
         console.log("Room exists:", response.data.content);
@@ -84,6 +86,7 @@ const EditorPage = () => {
     editorRef.current = editor;
 
     try {
+      console.log("mount after whiteboard");
       const response = await fileExist(roomId); // Await the promise to get the resolved data
       editorRef.current.setValue(response); // Set the content if available
     } catch (error) {
@@ -125,14 +128,16 @@ const EditorPage = () => {
         ACTIONS.JOINED,
         ({ clients, username, socketId }) => {
           if (username !== location.state?.username) {
-            toast.success(`${username} joined the room.`);
+            toast.success(`${username} joined the room`);
             console.log(`${username} joined`);
           }
+          console.log("SUKHMANDUKHMAN");
           setClients(clients);
-          socketRef.current.emit(ACTIONS.SYNC_CODE, {
-            code: codeRef.current,
-            socketId,
-          });
+          if (editorRef.current.value !== null)
+            socketRef.current.emit(ACTIONS.SYNC_CODE, {
+              code: editorRef.current.value,
+              socketId,
+            });
         }
       );
 
@@ -286,13 +291,16 @@ const EditorPage = () => {
     console.log("Sdasdasdasd");
     if (socketRef.current) {
       socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
-        if (code !== null && code != editorRef.current.getValue()) {
-          console.log(roomId + code);
-          editorRef.current.setValue(code);
-          // socketRef.current.emit(ACTIONS.CODE_CHANGE, {
-          //     roomId,
-          //     code,
-          // });
+        console.log("SUKHMANDUKHMAN420 " + code);
+        if (editorRef.current !== null) {
+          if (code !== null && code != editorRef.current.getValue()) {
+            console.log(roomId + code);
+            editorRef.current.setValue(code);
+            // socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+            //     roomId,
+            //     code,
+            // });
+          }
         }
       });
     }
@@ -301,6 +309,17 @@ const EditorPage = () => {
       socketRef.current.off(ACTIONS.CODE_CHANGE);
     };
   }, [socketRef.current]);
+
+  // if (socketRef.current) {
+  //   socketRef.current.on("disconnecting", () => {
+  //     console.log("disconnecccc");
+  //     const codeValue = editorRef.current.getValue();
+  //     socketRef.current.emit("clientDisconnect", {
+  //       roomId: roomId, // roomId or any other identifier
+  //       code: codeValue, // The code from the editor
+  //     });
+  //   });
+  // }
 
   return (
     <div style={{ height: "100vh", width: "100vw", fontFamily: "Manrope" }}>

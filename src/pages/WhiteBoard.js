@@ -20,24 +20,24 @@ import Penciltool from "./Penciltool";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../context/AuthContext";
 
-const validateToken = (token) => {
-  try {
-    const decoded = jwtDecode(token); // Decode the token payload
-    const currentTime = Date.now() / 1000; // Current time in seconds
+// const validateToken = (token) => {
+//   try {
+//     const decoded = jwtDecode(token); // Decode the token payload
+//     const currentTime = Date.now() / 1000; // Current time in seconds
 
-    if (decoded.exp < currentTime) {
-      console.error("Token has expired");
-      return false;
-    }
+//     if (decoded.exp < currentTime) {
+//       console.error("Token has expired");
+//       return false;
+//     }
 
-    console.log("Token is valid:", decoded);
-    return true;
-  } catch (error) {
-    console.error("Invalid token:", error.message);
-    toast.error("Please Login First");
-    return false;
-  }
-};
+//     console.log("Token is valid:", decoded);
+//     return true;
+//   } catch (error) {
+//     console.error("Invalid token:", error.message);
+//     toast.error("Please Login First");
+//     return false;
+//   }
+// };
 
 const WhiteBoard = () => {
   const [clients, setClients] = useState([]);
@@ -51,12 +51,12 @@ const WhiteBoard = () => {
 
   const editorRef = useRef();
 
-  useEffect(() => {
-    if (validateToken(token) === false) {
-      //console.log("Invalid token:", token?.data);
-      navigate("/"); // Redirect to login page if token is invalid
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (validateToken(token) === false) {
+  //     //console.log("Invalid token:", token?.data);
+  //     navigate("/"); // Redirect to login page if token is invalid
+  //   }
+  // }, [token, navigate]);
 
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem("code");

@@ -368,6 +368,32 @@ app.delete("/files/:id", async (req, res) => {
   }
 });
 
+app.post("/rooms/:id", async (req, res) => {
+  const roomId = req.params.id;
+  const newContent = req.body.content; // Assuming content comes from the request body
+
+  try {
+    console.log("daalra hu koshish");
+    // Update or insert (upsert) room content in the database
+    const result = await CodeFile.updateOne(
+      { room: roomId }, // Query to find the room
+      { $set: { content: newContent } }, // Data to update or insert
+      { upsert: true } // Upsert option enabled
+    );
+
+    if (result.upsertedCount > 0) {
+      res.status(201).send({ message: "Room created successfully", result });
+    } else if (result.matchedCount > 0) {
+      res.status(200).send({ message: "Room updated successfully", result });
+    } else {
+      res.status(404).send({ message: "Room not found or updated", result });
+    }
+  } catch (error) {
+    console.error("Error updating or inserting room:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
 app.listen(8000, () => {
   console.log("port connected");
 });
